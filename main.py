@@ -29,7 +29,7 @@ app.secret_key = constants.SECRET_KEY
 sections = re.compile(r"Tutorial\n[=\-]+\n+(.*)\n*Tutorial Code\n[=\-]+\n+(.*)\n*Expected Output\n[=\-]+\n+(.*)\n*Solution\n[=\-]+\n*(.*)\n*", re.MULTILINE | re.DOTALL)
 WIKI_WORD_PATTERN = re.compile('\[\[([^]|]+\|)?([^]]+)\]\]')
 
-current_domain = constants.LEARNPYTHON_DOMAIN
+current_domain = constants.LEARNPYTHON_DOMAIN  # python
 
 if __name__ == '__main__':
     import argparse
@@ -37,8 +37,8 @@ if __name__ == '__main__':
     parser.add_argument(
         "-d",
         "--domain",
-        help="Default domain when running in development mode",
-        default=constants.LEARNPYTHON_DOMAIN,
+        help="Default domain when running in development mode",        
+        default=current_domain,
         required=True,
         choices=constants.DOMAIN_DATA.keys()
     )
@@ -176,10 +176,9 @@ def init_tutorials():
 
                 tutorial_dict = tutorial_data[domain][language][tutorial]
 
-                try:
-                    tutorial_dict["text"] = open(os.path.join(os.path.dirname(__file__), "tutorials", domain, language, tutorial_file)).read().replace("\r\n", "\n")
-                except Exception, e:
-                    tutorial_dict["text"] = "There was an error reading the tutorial. Exception: %s" % e.message
+                tutorial_path = os.path.join(os.path.dirname(__file__), "tutorials", domain, language, tutorial_file)
+
+                tutorial_dict["text"] = open(tutorial_path).read().replace("\r\n", "\n")
 
                 # create links by looking at all lines that are not code lines
                 stripped_text = "\n".join([x for x in tutorial_dict["text"].split("\n") if not x.startswith("    ")])
@@ -196,6 +195,8 @@ def init_tutorials():
                     tutorial_dict["solution"] = untab(solution)
                     tutorial_dict["is_tutorial"] = True
                 else:
+                    if tutorial_file != "Welcome.md":
+                        logging.warn("File %s/%s/%s is not a tutorial", domain, language, tutorial_file)
                     tutorial_dict["page_title"] = ""
                     tutorial_dict["text"] = wikify(tutorial_dict["text"], language)
                     tutorial_dict["code"] = constants.DOMAIN_DATA[domain]["default_code"]

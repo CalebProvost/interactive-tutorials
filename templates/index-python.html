@@ -109,19 +109,12 @@
                             eventLabel: event.target.parentElement.dataset.variant
                         });
                     }
-                    window.addEventListener('DOMContentLoaded', function() {
-                        var banners = document.querySelectorAll('.ab-test > a');
-                        var bannerIndex = Math.floor(Math.random() * banners.length);
-                        banners[bannerIndex].style.display = "block";
-                        for (var i = 0; i < banners.length; i++) {
-                            banners[i].addEventListener('click', handleOutboundLinkClicks);
-                        }
-                    });
+
                 </script>
 
                 <h4>Sponsors</h4>
                 <div style="margin-top: 10px">
-                    <a href="https://digitalocean.com/"><img src="/static/img/banners/digital-ocean.png" style="width: 160px" alt="Digital Ocean"></a>
+                    <a href="https://digitalocean.com/"><img src="/static/img/banners/digital-ocean.svg" style="width: 160px" alt="Digital Ocean"></a>
                 </div>
 
             </div>
